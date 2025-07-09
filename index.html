@@ -3,173 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virus Alert!</title>
+    <title>Special Message For You</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #000;
-            color: #fff;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-        
-        .phone {
-            width: 300px;
-            height: 600px;
-            background-color: #111;
-            border-radius: 30px;
-            position: relative;
-            overflow: hidden;
-            border: 10px solid #333;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-        }
-        
-        .screen {
-            width: 100%;
-            height: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-            position: relative;
-        }
-        
-        .alert {
-            background-color: #ff0000;
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            animation: pulse 1s infinite;
-        }
-        
-        .warning-icon {
-            font-size: 50px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #ffebee;
             text-align: center;
-            margin: 20px 0;
-            color: #ff0000;
+            padding: 50px;
+            transition: all 0.5s;
         }
-        
-        .message {
-            margin-bottom: 20px;
-            line-height: 1.5;
+        h1 {
+            color: #ff4081;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px #ccc;
         }
-        
-        .button {
-            background-color: #333;
+        p {
+            font-size: 1.5em;
+            color: #555;
+        }
+        .tease-container {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            background-color: #ff4081;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin: 5px;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 50px;
             cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
         }
-        
-        .button:hover {
-            background-color: #444;
+        button:hover {
+            background-color: #f50057;
+            transform: scale(1.05);
         }
-        
-        .virus {
-            position: absolute;
-            color: #ff0000;
-            font-size: 20px;
-            animation: fall linear infinite;
+        .gif {
+            max-width: 200px;
+            margin: 20px auto;
         }
-        
-        @keyframes fall {
-            to {
-                transform: translateY(600px);
-            }
+        .rotate {
+            animation: spin 2s linear infinite;
         }
-        
-        @keyframes pulse {
-            0% { background-color: #ff0000; }
-            50% { background-color: #cc0000; }
-            100% { background-color: #ff0000; }
-        }
-        
-        .glitch {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="1" y="50%" fill="red" opacity="0.2"/></svg>');
-            animation: glitch 0.1s infinite;
-            pointer-events: none;
-            opacity: 0.7;
-        }
-        
-        @keyframes glitch {
-            0% { transform: translateX(0); }
-            20% { transform: translateX(-5px); }
-            40% { transform: translateX(5px); }
-            60% { transform: translateX(-5px); }
-            80% { transform: translateX(5px); }
-            100% { transform: translateX(0); }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="phone">
-        <div class="screen">
-            <div class="glitch"></div>
-            <div class="alert">
-                <strong>VIRUS DETECTED!</strong>
-            </div>
-            
-            <div class="warning-icon">
-                ⚠️
-            </div>
-            
-            <div class="message">
-                <p>Your device has been infected with a dangerous virus (Android.Trojan.Virus)!</p>
-                <p>All your personal data is at risk!</p>
-                <p>Immediate action required!</p>
-            </div>
-            
-            <div style="text-align: center;">
-                <button class="button" onclick="removeVirus()">REMOVE VIRUS</button>
-                <button class="button" onclick="ignoreWarning()">IGNORE</button>
-            </div>
+    <div class="tease-container">
+        <h1>Hey There, Special Person! 👋</h1>
+        <p>I've got something important to tell you...</p>
+        
+        <div id="message1">
+            <p>Did you know you're absolutely...</p>
+            <button onclick="showNextMessage()">Click to find out!</button>
+        </div>
+        
+        <div id="message2" class="hidden">
+            <p>...the most...</p>
+            <button onclick="showNextMessage()">Keep going!</button>
+        </div>
+        
+        <div id="message3" class="hidden">
+            <p>...interesting person I know?</p>
+            <p>(Okay, maybe "interesting" is code for something else 😜)</p>
+            <img src="https://media.giphy.com/media/l0HU7JI1QEBk6EvU4/giphy.gif" alt="Teasing GIF" class="gif">
+            <button onclick="showFinalMessage()">One last click!</button>
+        </div>
+        
+        <div id="finalMessage" class="hidden">
+            <h2 class="rotate">😂 JUST KIDDING! 😂</h2>
+            <p>You know I'm just teasing you!</p>
+            <p>But seriously... you're awesome ❤️</p>
+            <img src="https://media.giphy.com/media/3o7abAHdYvZdBNnGZq/giphy.gif" alt="Hug GIF" class="gif">
         </div>
     </div>
-    
+
     <script>
-        // Create falling virus elements
-        function createViruses() {
-            const phone = document.querySelector('.phone');
-            const viruses = ['🦠', '💀', '☠️', '⚠️', '❌', '🔥'];
+        let currentMessage = 1;
+        
+        function showNextMessage() {
+            document.getElementById(`message${currentMessage}`).classList.add('hidden');
+            currentMessage++;
+            document.getElementById(`message${currentMessage}`).classList.remove('hidden');
+        }
+        
+        function showFinalMessage() {
+            document.getElementById('message3').classList.add('hidden');
+            document.getElementById('finalMessage').classList.remove('hidden');
             
-            setInterval(() => {
-                const virus = document.createElement('div');
-                virus.className = 'virus';
-                virus.textContent = viruses[Math.floor(Math.random() * viruses.length)];
-                virus.style.left = Math.random() * 280 + 'px';
-                virus.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                phone.appendChild(virus);
-                
-                // Remove virus after animation completes
-                setTimeout(() => {
-                    virus.remove();
-                }, 5000);
-            }, 300);
+            // Change background color randomly
+            const colors = ['#ffebee', '#e8f5e9', '#e3f2fd', '#f3e5f5', '#fff8e1'];
+            document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         }
-        
-        // Button functions
-        function removeVirus() {
-            alert("This is just a simulation! Your device is safe.");
-        }
-        
-        function ignoreWarning() {
-            alert("This is just a simulation! Your device is safe.");
-        }
-        
-        // Start the animation
-        window.onload = createViruses;
     </script>
 </body>
 </html>
