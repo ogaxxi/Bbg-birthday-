@@ -2,93 +2,174 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Happy Birthday Fizzas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virus Alert!</title>
     <style>
         body {
             margin: 0;
-            font-family: 'Comic Sans MS', cursive;
-            background: linear-gradient(to bottom right, #ffebee, #fffaf0);
-            color: #6c2a3a;
-            text-align: center;
-            overflow-x: hidden;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
-        h1 {
-            font-size: 3em;
-            margin-top: 40px;
-            color: #e75480;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        
+        .phone {
+            width: 300px;
+            height: 600px;
+            background-color: #111;
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+            border: 10px solid #333;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
         }
-        .apology {
-            font-size: 1.3em;
-            color: #b65876;
-            margin: 10px 70px;
-        }
-        .message {
-            background-color: #fffdf5;
-            border: 2px dashed #ff6ec1;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 700px;
-            margin: 30px auto;
-            color: #444;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            line-height: 1.8;
-        }
-        .heart {
-            color: #ff6ec1;
-            font-size: 1.2em;
-        }
-        .footer {
-            margin-top: 30px;
-            font-size: 1em;
-            color: #888;
-        }
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            pointer-events: none;
+        
+        .screen {
             width: 100%;
             height: 100%;
-            background: url('https://i.ibb.co/07r9dXf/stars-overlay.png');
-            background-size: cover;
-            opacity: 0.2;
-            z-index: -1;
+            padding: 20px;
+            box-sizing: border-box;
+            position: relative;
         }
-        .signature {
-            font-family: 'Brush Script MT', cursive;
-            font-size: 1.5em;
-            color: #e75480;
-            margin-top: 20px;
+        
+        .alert {
+            background-color: #ff0000;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            animation: pulse 1s infinite;
         }
-        .emoji {
-            font-size: 1.2em;
+        
+        .warning-icon {
+            font-size: 50px;
+            text-align: center;
+            margin: 20px 0;
+            color: #ff0000;
+        }
+        
+        .message {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        
+        .button:hover {
+            background-color: #444;
+        }
+        
+        .virus {
+            position: absolute;
+            color: #ff0000;
+            font-size: 20px;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(600px);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { background-color: #ff0000; }
+            50% { background-color: #cc0000; }
+            100% { background-color: #ff0000; }
+        }
+        
+        .glitch {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="1" y="50%" fill="red" opacity="0.2"/></svg>');
+            animation: glitch 0.1s infinite;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        
+        @keyframes glitch {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-5px); }
+            40% { transform: translateX(5px); }
+            60% { transform: translateX(-5px); }
+            80% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
         }
     </style>
 </head>
 <body>
-    <div class="stars"></div>
-    <h1>Happy Birthday Fizzaaaaaaa <span class="emoji">💖🥰🎂🥳</span></h1>
-    <div class="apology">Fizzaaaa sorry for being late <span class="emoji">🥹🥲</span></div>
-    
-    <div class="message">
-        <p>Fizzaaaa happy birthday <span class="emoji">😋🌸🥹</span></p>
-        
-        <p>Aaj ka din kasa guzra uhh ka <span class="emoji">👉🏻👈🏻</span> hopefully acha guzra hoga bbg uhh na best ho best, best, best, bht zda best. <span class="emoji">💅🏻💖😋✨️</span></p>
-        
-        <p>InshaAllah apka ya saal acha guzre ga aur mere sth guzra ga <span class="emoji">😌</span> we both will make these years as our golden period of life <span class="emoji">💕🌸🫠🤍</span></p>
-        
-        <p>Dkh lena btw asta asta hum milne k wqt kareeb ja rhe hain khair <span class="emoji">💕</span> tumhare bdh ka din kasa guzra tha <span class="emoji">🥹</span></p>
-        
-        <p>Aaj tk maine kesi ko bdh wish nhi ki so mujhe smjh nhi arha kya likhoun but uhh ko meri trf se deerrr sari wishes <span class="emoji">😁</span></p>
-        
-        <p>Humesha mere sth rhna <span class="emoji">😇😼</span> humesha khush rhna <span class="emoji">😭👉🏻👈🏻💖</span> aur enjoy krti rhna <span class="emoji">🥰🥳</span></p>
-        
-        <div class="signature">Happy birthday fizzaaaaaaaaaa<span class="emoji">💖🥰🎂🥳</span></div>
+    <div class="phone">
+        <div class="screen">
+            <div class="glitch"></div>
+            <div class="alert">
+                <strong>VIRUS DETECTED!</strong>
+            </div>
+            
+            <div class="warning-icon">
+                ⚠️
+            </div>
+            
+            <div class="message">
+                <p>Your device has been infected with a dangerous virus (Android.Trojan.Virus)!</p>
+                <p>All your personal data is at risk!</p>
+                <p>Immediate action required!</p>
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="button" onclick="removeVirus()">REMOVE VIRUS</button>
+                <button class="button" onclick="ignoreWarning()">IGNORE</button>
+            </div>
+        </div>
     </div>
     
-    <div class="footer">
-        <p>Made with <span class="heart">♥</span> for your special day</p>
-    </div>
+    <script>
+        // Create falling virus elements
+        function createViruses() {
+            const phone = document.querySelector('.phone');
+            const viruses = ['🦠', '💀', '☠️', '⚠️', '❌', '🔥'];
+            
+            setInterval(() => {
+                const virus = document.createElement('div');
+                virus.className = 'virus';
+                virus.textContent = viruses[Math.floor(Math.random() * viruses.length)];
+                virus.style.left = Math.random() * 280 + 'px';
+                virus.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                phone.appendChild(virus);
+                
+                // Remove virus after animation completes
+                setTimeout(() => {
+                    virus.remove();
+                }, 5000);
+            }, 300);
+        }
+        
+        // Button functions
+        function removeVirus() {
+            alert("This is just a simulation! Your device is safe.");
+        }
+        
+        function ignoreWarning() {
+            alert("This is just a simulation! Your device is safe.");
+        }
+        
+        // Start the animation
+        window.onload = createViruses;
+    </script>
 </body>
 </html>
