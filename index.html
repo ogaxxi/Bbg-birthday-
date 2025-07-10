@@ -3,110 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Special Message For You</title>
+    <title>Pagliii Simulator</title>
     <style>
         body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-family: 'Arial', sans-serif;
             background-color: #ffebee;
-            text-align: center;
-            padding: 50px;
-            transition: all 0.5s;
+            background-image: url('https://i.pinimg.com/originals/0b/a3/d6/0ba3d63262e658d98660f81a52ed919e.jpg');
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
         }
-        h1 {
-            color: #ff4081;
-            font-size: 3em;
-            text-shadow: 2px 2px 4px #ccc;
-        }
-        p {
-            font-size: 1.5em;
-            color: #555;
-        }
-        .tease-container {
-            background-color: white;
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            max-width: 600px;
-            margin: 0 auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            z-index: 1;
         }
-        .hidden {
-            display: none;
+        
+        h1 {
+            color: #e91e63;
+            margin-bottom: 30px;
+            font-size: 24px;
         }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
         button {
-            background-color: #ff4081;
+            background-color: #e91e63;
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 1.2em;
+            padding: 12px 20px;
             border-radius: 50px;
             cursor: pointer;
-            margin-top: 20px;
+            font-size: 16px;
             transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(233, 30, 99, 0.3);
         }
+        
         button:hover {
-            background-color: #f50057;
-            transform: scale(1.05);
+            background-color: #c2185b;
+            transform: translateY(-2px);
         }
-        .gif {
-            max-width: 200px;
-            margin: 20px auto;
+        
+        .floating-bbg {
+            position: absolute;
+            font-size: 24px;
+            color: rgba(233, 30, 99, 0.3);
+            animation: float 5s infinite ease-in-out;
+            z-index: 0;
+            user-select: none;
         }
-        .rotate {
-            animation: spin 2s linear infinite;
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        
+        .rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+            display: none;
+        }
+        
+        .emoji-rain {
+            position: absolute;
+            font-size: 24px;
+            animation: rain linear forwards;
+        }
+        
+        @keyframes rain {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s forwards;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .sad-mode {
+            filter: grayscale(50%) brightness(70%);
+            transition: all 1s;
         }
     </style>
 </head>
 <body>
-    <div class="tease-container">
-        <h1>Hey There, Special Person! 👋</h1>
-        <p>I've got something important to tell you...</p>
-        
-        <div id="message1">
-            <p>Did you know you're absolutely...</p>
-            <button onclick="showNextMessage()">Click to find out!</button>
-        </div>
-        
-        <div id="message2" class="hidden">
-            <p>...the most...</p>
-            <button onclick="showNextMessage()">Keep going!</button>
-        </div>
-        
-        <div id="message3" class="hidden">
-            <p>...interesting person I know?</p>
-            <p>(Okay, maybe "interesting" is code for something else 😜)</p>
-            <img src="https://media.giphy.com/media/l0HU7JI1QEBk6EvU4/giphy.gif" alt="Teasing GIF" class="gif">
-            <button onclick="showFinalMessage()">One last click!</button>
-        </div>
-        
-        <div id="finalMessage" class="hidden">
-            <h2 class="rotate">😂 JUST KIDDING! 😂</h2>
-            <p>You know I'm just teasing you!</p>
-            <p>But seriously... you're awesome ❤️</p>
-            <img src="https://media.giphy.com/media/3o7abAHdYvZdBNnGZq/giphy.gif" alt="Hug GIF" class="gif">
+    <div class="container" id="main-container">
+        <h1 id="question">tum raat ko kidhr thi pagliii 😤</h1>
+        <div class="options" id="options-container">
+            <button onclick="selectOption(1)">sogi thi</button>
+            <button onclick="selectOption(2)">dost k dm mein thi</button>
         </div>
     </div>
 
+    <div class="rain" id="emoji-rain"></div>
+
     <script>
-        let currentMessage = 1;
-        
-        function showNextMessage() {
-            document.getElementById(`message${currentMessage}`).classList.add('hidden');
-            currentMessage++;
-            document.getElementById(`message${currentMessage}`).classList.remove('hidden');
+        // Create floating BBG letters
+        function createFloatingBBG() {
+            const letters = ['B', 'B', 'G'];
+            for (let i = 0; i < 15; i++) {
+                const bbg = document.createElement('div');
+                bbg.className = 'floating-bbg';
+                bbg.textContent = letters[Math.floor(Math.random() * letters.length)];
+                bbg.style.left = `${Math.random() * 100}%`;
+                bbg.style.top = `${Math.random() * 100}%`;
+                bbg.style.animationDelay = `${Math.random() * 5}s`;
+                document.body.appendChild(bbg);
+            }
         }
-        
-        function showFinalMessage() {
-            document.getElementById('message3').classList.add('hidden');
-            document.getElementById('finalMessage').classList.remove('hidden');
+
+        // Create emoji rain
+        function createEmojiRain() {
+            const emojis = ['😭', '😢', '💔', '😿', '🥺', '😞', '😩', '😫', '😔'];
+            const rainContainer = document.getElementById('emoji-rain');
+            rainContainer.style.display = 'block';
+            document.body.classList.add('sad-mode');
             
-            // Change background color randomly
-            const colors = ['#ffebee', '#e8f5e9', '#e3f2fd', '#f3e5f5', '#fff8e1'];
-            document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'emoji-rain';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = `${Math.random() * 100}%`;
+                    emoji.style.top = `-50px`;
+                    emoji.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                    rainContainer.appendChild(emoji);
+                    
+                    // Remove emoji after animation
+                    setTimeout(() => {
+                        emoji.remove();
+                    }, 5000);
+                }, i * 200);
+            }
         }
+
+        // Handle option selection
+        function selectOption(option) {
+            const container = document.getElementById('main-container');
+            container.classList.add('slide-in');
+            
+            if (option === 1) {
+                // First path - "sogi thi"
+                document.getElementById('question').textContent = "sone se phle btaya kyun nhi";
+                document.getElementById('options-container').innerHTML = `
+                    <button onclick="selectOption(11)">sorry</button>
+                    <button onclick="selectOption(12)">ainda baad nhi hoga</button>
+                `;
+            } else if (option === 2) {
+                // Second path - "dost k dm mein thi"
+                document.getElementById('question').textContent = "kyun mein bura houn kya";
+                document.getElementById('options-container').innerHTML = `
+                    <button onclick="selectOption(21)">yes</button>
+                    <button onclick="selectOption(22)">no</button>
+                `;
+            } else if (option === 11) {
+                // "sorry" selected
+                document.getElementById('question').textContent = "it's okay pookie✨️💗";
+                document.getElementById('options-container').innerHTML = '';
+            } else if (option === 12) {
+                // "ainda baad nhi hoga" selected
+                document.getElementById('question').textContent = "acha but dhyan rkhna ab se wrna nrz ho joun ga😾💔";
+                document.getElementById('options-container').innerHTML = '';
+            } else if (option === 21) {
+                // "yes" selected - start emoji rain
+                document.getElementById('question').textContent = "";
+                document.getElementById('options-container').innerHTML = '';
+                createEmojiRain();
+            } else if (option === 22) {
+                // "no" selected
+                document.getElementById('question').textContent = "awhhhhhh thanks pagliii";
+                document.getElementById('options-container').innerHTML = '';
+            }
+        }
+
+        // Initialize
+        window.onload = function() {
+            createFloatingBBG();
+        };
     </script>
 </body>
 </html>
