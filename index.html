@@ -2,38 +2,283 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Good Morning Friend</title>
+    <title>Platformer Adventure Game</title>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: #f6e58d;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .message {
-            background: #fffbe6;
-            padding: 40px 60px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            text-align: center;
-        }
-        .message h1 {
-            color: #f9ca24;
-            margin-bottom: 20px;
-            font-size: 2.5em;
-        }
-        .message p {
-            color: #686868;
-            font-size: 1.2em;
-        }
+        body { background: #222; color: #fff; font-family: Arial; margin: 0; }
+        #gameCanvas { background: #87ceeb; display: block; margin: 20px auto; border: 2px solid #333; }
+        #menu, #mapSelect, #charSelect, #gameUI { text-align: center; margin-top: 40px;}
+        button { padding: 10px 24px; font-size: 18px; margin: 10px 15px; border-radius: 8px; border: none; cursor: pointer; background: #3498db; color: #fff;}
+        button:hover { background: #217dbb; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="message">
-        <h1>Good Morning, Friend!</h1>
-        <p>Wishing you a bright and beautiful day ahead.</p>
+    <div id="menu">
+        <h1>Platformer Adventure Game</h1>
+        <button onclick="showCharSelect()">Start Game</button>
+        <button onclick="showAbout()">About</button>
+        <div id="about" class="hidden">
+            <p>Jump, run, and swim through different maps! Avoid obstacles and birds, and choose your favorite character.</p>
+        </div>
     </div>
+
+    <div id="charSelect" class="hidden">
+        <h2>Choose Your Character</h2>
+        <button onclick="selectChar(0)">🧑 Character 1</button>
+        <button onclick="selectChar(1)">🧔 Character 2</button>
+        <button onclick="selectChar(2)">👩 Character 3</button>
+    </div>
+
+    <div id="mapSelect" class="hidden">
+        <h2>Select Map</h2>
+        <button onclick="selectMap(0)">Map 1: Sunny Day</button>
+        <button onclick="selectMap(1)">Map 2: Winter Night</button>
+    </div>
+
+    <div id="gameUI" class="hidden">
+        <span id="timer">Time: 0s</span>
+        <span style="margin-left:30px;" id="season"></span>
+        <span style="margin-left:30px;" id="charInfo"></span>
+        <button onclick="restartGame()" style="float:right;">Restart</button>
+    </div>
+
+    <canvas id="gameCanvas" width="900" height="400" class="hidden"></canvas>
+
+    <script>
+        // Basic game variables
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let gameInterval, timer = 0;
+        let selectedMap = 0;
+        let selectedChar = 0;
+        let season = ['Spring (Day)', 'Winter (Night)'];
+        let charNames = ['Character 1', 'Character 2', 'Character 3'];
+        let charIcons = ['🧑', '🧔', '👩'];
+        let gameStarted = false;
+
+        // Player object
+        const player = {
+            x: 80, y: 320, w: 32, h: 48, vx: 0, vy: 0, onGround: false, jumping: false, swimming: false, speed: 4
+        };
+
+        // Map data
+        const maps = [
+            {
+                bg: "#87ceeb", season: "Spring (Day)", obstacles: [
+                    {x: 220, y: 350, w: 60, h: 20},
+                    {x: 420, y: 320, w: 60, h: 20},
+                    {x: 600, y: 350, w: 60, h: 20},
+                ],
+                birds: [
+                    {x: 300, y: 120, dir: 1, speed: 2, attackDown: true},
+                    {x: 700, y: 100, dir: -1, speed: 1.5, attackDown: false}
+                ],
+                water: {x: 500, y: 370, w: 100, h: 30}
+            },
+            {
+                bg: "#232b44", season: "Winter (Night)", obstacles: [
+                    {x: 150, y: 350, w: 60, h: 20},
+                    {x: 350, y: 300, w: 80, h: 20},
+                    {x: 750, y: 350, w: 60, h: 20},
+                ],
+                birds: [
+                    {x: 450, y: 90, dir: 1, speed: 2.2, attackDown: true},
+                    {x: 800, y: 60, dir: -1, speed: 1.2, attackDown: false}
+                ],
+                water: {x: 250, y: 370, w: 70, h: 30}
+            }
+        ];
+
+        function showCharSelect() {
+            document.getElementById('menu').classList.add('hidden');
+            document.getElementById('charSelect').classList.remove('hidden');
+        }
+        function showAbout() {
+            document.getElementById('about').classList.toggle('hidden');
+        }
+        function selectChar(idx) {
+            selectedChar = idx;
+            document.getElementById('charSelect').classList.add('hidden');
+            document.getElementById('mapSelect').classList.remove('hidden');
+        }
+        function selectMap(idx) {
+            selectedMap = idx;
+            document.getElementById('mapSelect').classList.add('hidden');
+            startGame();
+        }
+
+        function restartGame() {
+            timer = 0;
+            player.x = 80; player.y = 320; player.vx = 0; player.vy = 0; player.onGround = false; player.jumping = false; player.swimming = false;
+            startGame();
+        }
+
+        function startGame() {
+            document.getElementById('gameCanvas').classList.remove('hidden');
+            document.getElementById('gameUI').classList.remove('hidden');
+            document.getElementById('timer').innerText = "Time: 0s";
+            document.getElementById('season').innerText = `Season: ${maps[selectedMap].season}`;
+            document.getElementById('charInfo').innerText = `${charIcons[selectedChar]} ${charNames[selectedChar]}`;
+            gameStarted = true;
+            timer = 0;
+            if (gameInterval) clearInterval(gameInterval);
+            gameInterval = setInterval(gameLoop, 1000/60);
+        }
+
+        // Game controls
+        document.addEventListener('keydown', function(e) {
+            if (!gameStarted) return;
+            if (e.code === 'ArrowLeft' || e.code === 'KeyA') player.vx = -player.speed;
+            if (e.code === 'ArrowRight' || e.code === 'KeyD') player.vx = player.speed;
+            if ((e.code === 'ArrowUp' || e.code === 'Space' || e.code === 'KeyW') && player.onGround && !player.jumping) {
+                player.vy = player.swimming ? -4 : -9;
+                player.jumping = true;
+            }
+        });
+        document.addEventListener('keyup', function(e) {
+            if (e.code === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'ArrowRight' || e.code === 'KeyD') player.vx = 0;
+            if (e.code === 'ArrowUp' || e.code === 'Space' || e.code === 'KeyW') player.jumping = false;
+        });
+
+        // Game loop
+        function gameLoop() {
+            timer += 1/60;
+            document.getElementById('timer').innerText = `Time: ${timer.toFixed(1)}s`;
+            drawGame();
+            updatePlayer();
+            updateBirds();
+            checkCollisions();
+        }
+
+        function drawGame() {
+            // BG
+            ctx.fillStyle = maps[selectedMap].bg;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Ground
+            ctx.fillStyle = "#654321";
+            ctx.fillRect(0, 370, canvas.width, 30);
+
+            // Obstacles
+            ctx.fillStyle = "#e74c3c";
+            maps[selectedMap].obstacles.forEach(ob => {
+                ctx.fillRect(ob.x, ob.y, ob.w, ob.h);
+            });
+
+            // Water
+            let water = maps[selectedMap].water;
+            ctx.fillStyle = "#3498db";
+            ctx.fillRect(water.x, water.y, water.w, water.h);
+
+            // Birds
+            maps[selectedMap].birds.forEach(bird => {
+                ctx.fillStyle = "#f9e79f";
+                ctx.beginPath();
+                ctx.arc(bird.x, bird.y, 18, 0, Math.PI*2);
+                ctx.fill();
+                ctx.fillStyle = "#2d3436";
+                ctx.fillRect(bird.x-8, bird.y-12, 16, 6);
+            });
+
+            // Player
+            ctx.fillStyle = ["#f8c471","#a569bd","#5dade2"][selectedChar];
+            ctx.fillRect(player.x, player.y, player.w, player.h);
+            ctx.font = "32px Arial";
+            ctx.fillText(charIcons[selectedChar], player.x+2, player.y+35);
+        }
+
+        function updatePlayer() {
+            // Gravity
+            if (!player.swimming) player.vy += 0.4;
+            else player.vy += 0.1;
+            player.x += player.vx;
+            player.y += player.vy;
+
+            // Boundaries
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.w > canvas.width) player.x = canvas.width - player.w;
+            if (player.y + player.h > 370) {
+                player.y = 370 - player.h;
+                player.vy = 0;
+                player.onGround = true;
+                player.swimming = false;
+            } else {
+                player.onGround = false;
+            }
+
+            // Water
+            let water = maps[selectedMap].water;
+            if (player.x + player.w > water.x && player.x < water.x + water.w &&
+                player.y + player.h > water.y && player.y < water.y + water.h) {
+                player.swimming = true;
+                player.onGround = true;
+                if (player.y + player.h > water.y + water.h) {
+                    player.y = water.y + water.h - player.h;
+                    player.vy = 0;
+                }
+            } else {
+                player.swimming = false;
+            }
+        }
+
+        function updateBirds() {
+            maps[selectedMap].birds.forEach(bird => {
+                bird.x += bird.speed * bird.dir;
+                // Reverse at edge
+                if (bird.x < 40 || bird.x > canvas.width-40) bird.dir *= -1;
+                // Simple attack: move up/down
+                if (bird.attackDown) bird.y += Math.sin(timer*bird.speed)*2;
+            });
+        }
+
+        function checkCollisions() {
+            // Obstacles
+            maps[selectedMap].obstacles.forEach(ob => {
+                if (rectCollide(player, ob)) {
+                    // Push player back
+                    if (player.y + player.h - player.vy <= ob.y) {
+                        player.y = ob.y - player.h;
+                        player.vy = 0;
+                        player.onGround = true;
+                    } else if (player.x + player.w - player.vx <= ob.x) {
+                        player.x = ob.x - player.w;
+                    } else if (player.x - player.vx >= ob.x + ob.w) {
+                        player.x = ob.x + ob.w;
+                    }
+                }
+            });
+            // Birds
+            maps[selectedMap].birds.forEach(bird => {
+                if (circleRectCollide(bird, player)) {
+                    endGame("Bird Attack!");
+                }
+            });
+            // Water: already handled in updatePlayer
+        }
+
+        function endGame(msg) {
+            clearInterval(gameInterval);
+            gameStarted = false;
+            alert("Game Over! " + msg);
+            document.getElementById('gameCanvas').classList.add('hidden');
+            document.getElementById('gameUI').classList.add('hidden');
+            document.getElementById('menu').classList.remove('hidden');
+        }
+
+        function rectCollide(a, b) {
+            return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+        }
+        function circleRectCollide(circle, rect) {
+            let distX = Math.abs(circle.x - rect.x-rect.w/2);
+            let distY = Math.abs(circle.y - rect.y-rect.h/2);
+            if (distX > (rect.w/2 + 18)) return false;
+            if (distY > (rect.h/2 + 18)) return false;
+            if (distX <= (rect.w/2)) return true;
+            if (distY <= (rect.h/2)) return true;
+            let dx = distX - rect.w/2;
+            let dy = distY - rect.h/2;
+            return (dx*dx + dy*dy <= (18*18));
+        }
+    </script>
 </body>
 </html>
