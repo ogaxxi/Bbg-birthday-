@@ -1,126 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Flappy Block</title>
+  <meta charset="UTF-8">
+  <title>Mobile Maze Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background: #222;
-      font-family: sans-serif;
-      color: white;
-      text-align: center;
-    }
-
-    #game {
-      position: relative;
+    body { margin:0; font-family:sans-serif; background:#222; color:#fff; }
+    #menu, #about, #controls, #ballSelect, #game, #scoreScreen { 
+      display: none; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      min-height: 100vh;
       width: 100vw;
-      height: 100vh;
-      background-color: #333;
-      overflow: hidden;
-    }
-
-    #player {
       position: absolute;
-      width: 30px;
-      height: 30px;
-      background-color: #00f;
-      left: 50px;
-      top: 200px;
-      border-radius: 5px;
+      left: 0; top: 0;
+      background: #222;
+      z-index: 10;
     }
-
-    #obstacle {
-      position: absolute;
-      width: 50px;
-      height: 200px;
-      background-color: #f00;
-      right: -50px;
-      bottom: 0;
+    .menu-btn {
+      background: #444;
+      color: #fff;
+      border: none;
+      margin: 15px;
+      padding: 20px 50px;
+      font-size: 1.3em;
+      border-radius: 12px;
+      cursor:pointer;
+      transition: background .2s;
     }
+    .menu-btn:hover { background: #666; }
 
-    #score {
-      position: absolute;
-      top: 10px;
-      width: 100%;
-      font-size: 24px;
+    #ballOptions {
+      display: flex;
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .ball-option {
+      width:60px; height:60px; border-radius:50%;
+      border: 4px solid #fff;
+      cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:bold;
+      font-size:1.1em;
+    }
+    .ball-red { background:#e74c3c; }
+    .ball-blue { background:#3498db; }
+    .ball-green { background:#27ae60; }
+    .ball-black { background:#222; border-color:#e74c3c; }
+    #mazeCanvas {
+      background: #fff;
+      border: 5px solid #444;
+      display: block;
+      margin: 20px auto;
+      touch-action: none;
+    }
+    #controlsUI {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+      gap: 15px;
+    }
+    .ctrl-btn {
+      background: #555;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.4em;
+      padding: 25px 32px;
+      cursor:pointer;
+      transition: background .2s;
+      min-width: 80px;
+      min-height: 60px;
+    }
+    .ctrl-btn:active { background: #888; }
+    #timer {
+      font-size: 1.4em;
+      margin-top: 10px;
+      color: #e74c3c;
+    }
+    #scoreScreen h2 { color: #27ae60; }
+    @media (max-width:600px) {
+      .menu-btn, .ctrl-btn { font-size:1em; padding:15px 20px; }
+      #mazeCanvas { width:95vw; }
+      .ball-option { width:40px; height:40px; font-size:1em; }
     }
   </style>
 </head>
 <body>
-  <div id="game">
-    <div id="player"></div>
-    <div id="obstacle"></div>
+  <!-- Menu Screen -->
+  <div id="menu" style="display:flex;">
+    <h1>Maze Game</h1>
+    <button class="menu-btn" onclick="showBallSelect()">1. Start Game</button>
+    <button class="menu-btn" onclick="showControls()">2. Controls</button>
+    <button class="menu-btn" onclick="showAbout()">3. About Developer</button>
   </div>
-  <p id="score">Score: 0</p>
 
-  <script>
-    const player = document.getElementById('player');
-    const obstacle = document.getElementById('obstacle');
-    const scoreDisplay = document.getElementById('score');
+  <!-- Controls Screen -->
+  <div id="controls">
+    <h2>Controls</h2>
+    <p>
+      Use the four buttons below the maze:<br>
+      <strong>↑</strong> Up &nbsp; <strong>↓</strong> Down &nbsp;
+      <strong>←</strong> Left &nbsp; <strong>→</strong> Right<br>
+      Tap them to move your ball in the maze. Reach the exit before time runs out!
+    </p>
+    <button class="menu-btn" onclick="showMenu()">Back</button>
+  </div>
 
-    let gravity = 2;
-    let jumpHeight = 40;
-    let velocity = 0;
-    let score = 0;
-    let isGameOver = false;
+  <!-- About Developer -->
+  <div id="about">
+    <h2>About Developer</h2>
+    <p style="max-width: 600px;">
+      Saad is an 18-year-old amateur game developer from Islamabad who is just starting his journey in the world of game development. Though still learning, he has a genuine passion for creating games and spends much of his free time experimenting with simple projects and exploring new tools. Saad enjoys turning his creative ideas into small, playable experiences, even if they're not perfect yet. He's teaching himself the basics of coding and design, slowly building his skills one step at a time. As an enthusiastic beginner, Saad is eager to keep improving and dreams of one day creating a game that people around the world will enjoy.
+    </p>
+    <button class="menu-btn" onclick="showMenu()">Back</button>
+  </div>
 
-    document.body.addEventListener('click', () => {
-      if (isGameOver) return location.reload();
-      velocity = -jumpHeight;
-    });
+  <!-- Ball Select Screen -->
+  <div id="ballSelect">
+    <h2>Select Your Ball</h2>
+    <div id="ballOptions">
+      <div class="ball-option ball-red" onclick="startGame('red')" title="Red"></div>
+      <div class="ball-option ball-blue" onclick="startGame('blue')" title="Blue"></div>
+      <div class="ball-option ball-green" onclick="startGame('green')" title="Green"></div>
+      <div class="ball-option ball-black" onclick="startGame('black')" title="Black"></div>
+    </div>
+    <button class="menu-btn" onclick="showMenu()" style="margin-top:25px;">Back</button>
+  </div>
 
-    function gameLoop() {
-      if (isGameOver) return;
+  <!-- Game Screen -->
+  <div id="game">
+    <div id="timer">Time: <span id="timeLeft">30</span>s</div>
+    <canvas id="mazeCanvas" width="360" height="500"></canvas>
+    <div id="controlsUI">
+      <button class="ctrl-btn" onclick="moveBall('up')">↑</button>
+      <button class="ctrl-btn" onclick="moveBall('left')">←</button>
+      <button class="ctrl-btn" onclick="moveBall('down')">↓</button>
+      <button class="ctrl-btn" onclick="moveBall('right')">→</button>
+    </div>
+  </div>
 
-      // Gravity
-      velocity += gravity * 0.5;
-      let playerTop = parseInt(getComputedStyle(player).top);
-      playerTop += velocity;
+  <!-- Score Screen -->
+  <div id="scoreScreen">
+    <h2 id="scoreMsg"></h2>
+    <p id="scoreDetails"></p>
+    <button class="menu-btn" onclick="showMenu()">Back to Menu</button>
+  </div>
 
-      // Keep player on screen
-      if (playerTop < 0) playerTop = 0;
-      if (playerTop > window.innerHeight - 30) {
-        playerTop = window.innerHeight - 30;
-        gameOver();
+<script>
+  // UI State
+  function hideAll() {
+    document.querySelectorAll("#menu,#controls,#about,#ballSelect,#game,#scoreScreen")
+      .forEach(e=>e.style.display='none');
+  }
+  function showMenu() { hideAll(); document.getElementById('menu').style.display='flex'; stopTimer(); }
+  function showControls() { hideAll(); document.getElementById('controls').style.display='flex'; }
+  function showAbout() { hideAll(); document.getElementById('about').style.display='flex'; }
+  function showBallSelect() { hideAll(); document.getElementById('ballSelect').style.display='flex'; }
+  function showGame() { hideAll(); document.getElementById('game').style.display='flex'; }
+  function showScoreScreen(win, score) {
+    hideAll();
+    document.getElementById('scoreScreen').style.display='flex';
+    document.getElementById('scoreMsg').textContent = win ? "You Won!" : "Game Over";
+    let details = win 
+      ? `You reached the exit! Time remaining: ${score}s`
+      : `You failed to escape the maze in time.`;
+    document.getElementById('scoreDetails').textContent = details;
+  }
+
+  // Maze Definition (grid: 0 = open, 1 = wall, 'E' = exit)
+  const maze = [
+    // 0 1 2 3 4 5 6 7 8
+    [1,1,1,1,1,1,1,1,1], // 0
+    [1,0,0,0,1,0,0,0,1], // 1
+    [1,0,1,0,1,0,1,0,1], // 2
+    [1,0,1,0,0,0,1,0,1], // 3
+    [1,0,1,1,1,0,1,0,1], // 4
+    [1,0,0,0,1,0,0,0,1], // 5
+    [1,1,1,0,1,1,1,0,1], // 6
+    [1,0,0,0,0,0,1,'E',1], // 7
+    [1,1,1,1,1,1,1,1,1], // 8
+  ];
+  const mazeRows = maze.length, mazeCols = maze[0].length;
+  // Ball
+  let ball = {row:1, col:1, x:0, y:0, color:'red', radius:18, vx:0, vy:0};
+  let ballMoving = false;
+  let timer = 30, timerID=null, gameActive=false;
+  let exitRow=7, exitCol=7;
+  let lastMoveTime = 0;
+  function startGame(color) {
+    ball.color = color;
+    ball.row = 1; ball.col = 1;
+    ball.x = ball.col * 40 + 20; ball.y = ball.row * 55 + 25;
+    ball.vx = 0; ball.vy = 0;
+    timer = 30;
+    lastMoveTime = Date.now();
+    showGame();
+    drawMaze();
+    updateTimer();
+    gameActive = true;
+    startTimer();
+  }
+  function drawMaze() {
+    const canvas = document.getElementById('mazeCanvas'), ctx = canvas.getContext('2d');
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // Draw maze
+    for(let r=0;r<mazeRows;r++) {
+      for(let c=0;c<mazeCols;c++) {
+        let cell = maze[r][c];
+        let x = c*40, y = r*55;
+        if(cell === 1) {
+          ctx.fillStyle = "#444";
+          ctx.fillRect(x, y, 40, 55);
+        } else if(cell === 'E') {
+          // Exit: draw thick red line
+          ctx.fillStyle = "#fff";
+          ctx.fillRect(x, y, 40, 55);
+          ctx.fillStyle = "#e74c3c";
+          ctx.fillRect(x, y+45, 40, 10);
+        }
       }
-
-      player.style.top = playerTop + 'px';
-
-      // Move obstacle
-      let obstacleLeft = parseInt(getComputedStyle(obstacle).right);
-      obstacleLeft += 4;
-      obstacle.style.right = obstacleLeft + 'px';
-
-      if (obstacleLeft > window.innerWidth + 50) {
-        obstacle.style.right = '-50px';
-        score++;
-        scoreDisplay.innerText = 'Score: ' + score;
-      }
-
-      // Collision detection
-      const playerRect = player.getBoundingClientRect();
-      const obstacleRect = obstacle.getBoundingClientRect();
-
-      if (
-        playerRect.right > obstacleRect.left &&
-        playerRect.left < obstacleRect.right &&
-        playerRect.bottom > obstacleRect.top
-      ) {
-        gameOver();
-      }
-
-      requestAnimationFrame(gameLoop);
     }
+    // Draw ball
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.radius, 0, 2*Math.PI);
+    ctx.fillStyle = 
+      ball.color=='red'? '#e74c3c' :
+      ball.color=='blue'? '#3498db' :
+      ball.color=='green'? '#27ae60' : '#222';
+    ctx.shadowColor = '#888';
+    ctx.shadowBlur = 12;
+    ctx.fill();
+    ctx.restore();
+  }
 
-    function gameOver() {
-      isGameOver = true;
-      scoreDisplay.innerText += ' — Game Over! Tap to restart.';
+  // Ball mechanics: smooth movement
+  function moveBall(dir) {
+    if(!gameActive) return;
+    if(ballMoving) return; // allow only one move at a time
+    let dr=0,dc=0;
+    if(dir=='up') dr=-1;
+    if(dir=='down') dr=1;
+    if(dir=='left') dc=-1;
+    if(dir=='right') dc=1;
+    let nr = ball.row+dr, nc = ball.col+dc;
+    if(nr<0||nr>=mazeRows||nc<0||nc>=mazeCols) return;
+    let nextCell = maze[nr][nc];
+    if(nextCell === 1) return; // Wall
+    ballMoving = true;
+    // Animate ball moving smoothly
+    let targetX = nc*40+20, targetY = nr*55+25;
+    let steps = 15, step=0;
+    let dx = (targetX-ball.x)/steps, dy = (targetY-ball.y)/steps;
+    function animate() {
+      ball.x += dx; ball.y += dy;
+      drawMaze();
+      step++;
+      if(step<steps) requestAnimationFrame(animate);
+      else {
+        ball.x = targetX; ball.y = targetY;
+        ball.row = nr; ball.col = nc;
+        ballMoving = false;
+        drawMaze();
+        checkWinOrLose();
+      }
     }
+    animate();
+    lastMoveTime = Date.now();
+  }
+  function checkWinOrLose() {
+    if(maze[ball.row][ball.col] === 'E') {
+      gameActive = false;
+      stopTimer();
+      showScoreScreen(true, timer);
+    }
+  }
+  // Timer
+  function startTimer() {
+    timerID = setInterval(function(){
+      if(!gameActive) return;
+      timer--;
+      updateTimer();
+      if(timer<=0) {
+        gameActive=false;
+        stopTimer();
+        showScoreScreen(false, 0);
+      }
+    },1000);
+  }
+  function stopTimer() {
+    if(timerID) clearInterval(timerID);
+    timerID=null;
+  }
+  function updateTimer() {
+    document.getElementById('timeLeft').textContent = timer;
+  }
 
-    gameLoop();
-  </script>
+  // Initial state
+  showMenu();
+
+  // Touch gestures (mobile)
+  let touchStartX=0, touchStartY=0;
+  document.getElementById('mazeCanvas').addEventListener('touchstart',function(e){
+    if(e.touches.length==1) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }
+  });
+  document.getElementById('mazeCanvas').addEventListener('touchend',function(e){
+    if(e.changedTouches.length==1) {
+      let dx = e.changedTouches[0].clientX - touchStartX;
+      let dy = e.changedTouches[0].clientY - touchStartY;
+      if(Math.abs(dx)>Math.abs(dy)) {
+        if(dx>30) moveBall('right');
+        else if(dx<-30) moveBall('left');
+      } else {
+        if(dy>30) moveBall('down');
+        else if(dy<-30) moveBall('up');
+      }
+    }
+  });
+</script>
 </body>
 </html>
