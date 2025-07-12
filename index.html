@@ -5,7 +5,6 @@
   <title>Maze Game Enhanced</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* Calming background gradient and modern UI styles */
     body {
       margin:0; font-family:sans-serif;
       background: linear-gradient(120deg,#3498db 0%,#222 100%);
@@ -25,6 +24,13 @@
       transition: background .2s, box-shadow .3s;
     }
     .menu-btn:hover { background: #666; box-shadow: 0 2px 32px #3498db; }
+    #menu-graphics {
+      margin-bottom: 32px;
+      width: 220px; height: 120px; position: relative; display: flex; justify-content: center; align-items: center;
+    }
+    #menu-graphics canvas {
+      width: 220px; height: 120px; background: transparent;
+    }
     #ballOptions { display: flex; gap: 20px; margin-top: 30px; }
     .ball-option {
       width:60px; height:60px; border-radius:50%; border: 4px solid #fff; cursor:pointer;
@@ -56,6 +62,8 @@
       .menu-btn, .ctrl-btn { font-size:1em; padding:15px 20px; }
       #mazeCanvas { width:97vw; }
       .ball-option { width:40px; height:40px; font-size:1em; }
+      #menu-graphics { width: 95vw; height: 60px; }
+      #menu-graphics canvas { width: 95vw; height: 60px;}
     }
   </style>
 </head>
@@ -63,6 +71,9 @@
   <!-- Calming background music (royalty-free) -->
   <audio id="bgMusic" loop preload="auto" src="https://cdn.pixabay.com/audio/2022/10/16/audio_12b890eae4.mp3"></audio>
   <div id="menu" style="display:flex;">
+    <div id="menu-graphics">
+      <canvas id="menuCanvas" width="220" height="120"></canvas>
+    </div>
     <h1 style="text-shadow: 2px 3px 16px #0b6dcc;">Maze Game</h1>
     <button class="menu-btn" onclick="showBallSelect()">1. Start Game</button>
     <button class="menu-btn" onclick="showControls()">2. Controls</button>
@@ -96,7 +107,7 @@
     <button class="menu-btn" onclick="showMenu()" style="margin-top:25px;">Back</button>
   </div>
   <div id="game">
-    <div id="timer">Time: <span id="timeLeft">120</span>s</div>
+    <div id="timer">Time: <span id="timeLeft">60</span>s</div>
     <canvas id="mazeCanvas" width="620" height="620"></canvas>
     <div id="controlsUI">
       <button class="ctrl-btn" 
@@ -211,11 +222,11 @@
 
   // Ball and Game State
   let ball = {row:startRow, col:startCol, x:0, y:0, color:'red', radius:9};
-  let ballMoving=false, timer=120, timerID=null, gameActive=false, moveDirection=null, moveInterval=null;
+  let ballMoving=false, timer=60, timerID=null, gameActive=false, moveDirection=null, moveInterval=null;
   function startGame(color){
     ball.color=color; ball.row=startRow; ball.col=startCol;
     ball.x=ball.col*20+10; ball.y=ball.row*20+10;
-    timer=120; moveDirection=null; showGame(); generateMaze(); drawMaze(); updateTimer();
+    timer=60; moveDirection=null; showGame(); generateMaze(); drawMaze(); updateTimer();
     gameActive=true; startTimer();
   }
 
@@ -385,6 +396,83 @@
     requestAnimationFrame(pulseAnimLoop);
   }
   pulseAnimLoop();
+
+  // --- Menu Graphics ---
+  function drawMenuGraphics() {
+    const canvas = document.getElementById('menuCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Draw maze path (stylized)
+    ctx.save();
+    ctx.strokeStyle = "#3498db";
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.moveTo(20, 100);
+    ctx.lineTo(60, 60);
+    ctx.lineTo(120, 80);
+    ctx.lineTo(180, 40);
+    ctx.lineTo(200, 20);
+    ctx.stroke();
+    ctx.restore();
+
+    // Draw exit (door)
+    ctx.save();
+    ctx.fillStyle = "#e74c3c";
+    ctx.fillRect(200 - 12, 20 - 12, 24, 24);
+    ctx.strokeStyle = "#fff";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(200 - 12, 20 - 12, 24, 24);
+    ctx.restore();
+
+    // Animate balls moving along the path
+    let t = (Date.now() / 1000) % 1;
+    let pathPoints = [
+      [20, 100],
+      [60, 60],
+      [120, 80],
+      [180, 40],
+      [200, 20]
+    ];
+    function interpolate(points, t) {
+      // Linear interpolate between points
+      let n = points.length - 1;
+      let seg = Math.floor(t * n);
+      let localT = (t * n) - seg;
+      if (seg >= n) { seg = n - 1; localT = 1; }
+      let [x1, y1] = points[seg];
+      let [x2, y2] = points[seg + 1];
+      return [x1 + (x2 - x1) * localT, y1 + (y2 - y1) * localT];
+    }
+    let balls = [
+      {color:"#e74c3c", offset:0},
+      {color:"#3498db", offset:0.2},
+      {color:"#27ae60", offset:0.4},
+      {color:"#222", offset:0.6}
+    ];
+    balls.forEach((b,i)=>{
+      let [bx, by] = interpolate(pathPoints, (t + b.offset)%1);
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(bx, by, 11, 0, 2 * Math.PI);
+      ctx.fillStyle = b.color;
+      ctx.shadowColor = "#3498db";
+      ctx.shadowBlur = 12;
+      ctx.globalAlpha = 0.92;
+      ctx.fill();
+      ctx.restore();
+      // Ball highlight
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(bx + 4, by - 4, 4, 0, 2 * Math.PI);
+      ctx.fillStyle = "#fff";
+      ctx.globalAlpha = 0.3;
+      ctx.fill();
+      ctx.restore();
+    });
+    requestAnimationFrame(drawMenuGraphics);
+  }
+  drawMenuGraphics();
 </script>
 </body>
 </html>
