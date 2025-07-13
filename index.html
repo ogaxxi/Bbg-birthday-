@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Car Racing</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+    <title>Respectful Communication Guide</title>
     <style>
         * {
             margin: 0;
@@ -16,650 +13,229 @@
         }
         
         body {
-            overflow: hidden;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
-            color: white;
-            height: 100vh;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         
-        .game-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            max-width: 1200px;
-            max-height: 800px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
+        .container {
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
             overflow: hidden;
+            margin: 20px;
         }
         
-        #gameCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+        header {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
         }
         
-        .ui-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            pointer-events: none;
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
         }
         
-        .stats {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 15px 25px;
-            border-radius: 10px;
-            display: flex;
+        .main-content {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 30px;
         }
         
-        .stat-box {
-            text-align: center;
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
         }
         
-        .stat-value {
-            font-size: 28px;
-            font-weight: bold;
-            color: #ffcc00;
-            margin-top: 5px;
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
         }
         
-        .stat-label {
-            font-size: 14px;
-            opacity: 0.8;
+        .card:hover {
+            transform: translateY(-10px);
         }
         
-        .game-title {
-            text-align: center;
-            font-size: 32px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
-            margin-top: 20px;
+        .negative {
+            border-top: 5px solid #e74c3c;
         }
         
-        .controls {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            padding: 15px 30px;
-            border-radius: 10px;
-            display: flex;
-            gap: 20px;
+        .positive {
+            border-top: 5px solid #2ecc71;
         }
         
-        .control-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .key {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 5px 15px;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        
-        .start-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            pointer-events: all;
-        }
-        
-        .start-screen h1 {
-            font-size: 60px;
+        h2 {
+            font-size: 1.8rem;
             margin-bottom: 20px;
-            color: #ffcc00;
-            text-shadow: 0 0 15px rgba(255, 204, 0, 0.7);
-            letter-spacing: 3px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
         }
         
-        .start-screen p {
-            font-size: 20px;
-            max-width: 600px;
-            margin-bottom: 40px;
-            line-height: 1.6;
-            opacity: 0.9;
+        h2 i {
+            margin-right: 12px;
+            font-size: 1.5rem;
+        }
+        
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .word {
+            padding: 10px 15px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .negative .word {
+            background: #ffebee;
+            color: #c0392b;
+            border: 2px dashed #e74c3c;
+            text-decoration: line-through;
+        }
+        
+        .positive .word {
+            background: #e8f5e9;
+            color: #27ae60;
+            border: 2px solid #2ecc71;
+        }
+        
+        p {
+            line-height: 1.7;
+            margin: 15px 0;
+            font-size: 1.1rem;
+            color: #34495e;
+        }
+        
+        .quote {
+            background: #f8f9fa;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 25px 0;
+            font-style: italic;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .call-to-action {
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            padding: 40px;
+            text-align: center;
         }
         
         .btn {
-            background: linear-gradient(to right, #ffcc00, #ff6600);
-            color: #000;
-            border: none;
-            padding: 15px 50px;
-            font-size: 18px;
-            font-weight: bold;
+            display: inline-block;
+            background: #f39c12;
+            color: white;
+            padding: 15px 40px;
             border-radius: 50px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 5px 15px rgba(255, 102, 0, 0.4);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 20px;
             transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
         .btn:hover {
+            background: #e67e22;
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 102, 0, 0.6);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
         
-        .btn:active {
-            transform: translateY(1px);
-        }
-        
-        .lap-counter {
-            position: absolute;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            padding: 10px 30px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        
-        .lap-number {
-            color: #ffcc00;
-            font-size: 24px;
-        }
-        
-        .position-indicator {
-            position: absolute;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            padding: 8px 25px;
-            border-radius: 50px;
-            font-size: 16px;
-        }
-        
-        .speedometer {
-            position: absolute;
-            bottom: 150px;
-            right: 30px;
-            width: 150px;
-            height: 150px;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .speed-value {
-            font-size: 30px;
-            font-weight: bold;
-            color: #ffcc00;
-        }
-        
-        .speed-label {
-            font-size: 14px;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-        
-        .nitro-indicator {
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
-            width: 30px;
-            height: 150px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 15px;
-            overflow: hidden;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .nitro-fill {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 70%;
-            background: linear-gradient(to top, #00ccff, #0066ff);
-            border-radius: 15px;
-        }
-        
-        .nitro-label {
-            position: absolute;
-            top: -25px;
-            width: 100%;
+        footer {
             text-align: center;
-            font-size: 12px;
+            padding: 25px;
+            background: #2c3e50;
+            color: #ecf0f1;
+            font-size: 1.1rem;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="game-container">
-        <div id="gameCanvas"></div>
+    <div class="container">
+        <header>
+            <h1>Respectful Communication Guide</h1>
+            <p class="subtitle">Promoting positive language and understanding the impact of our words</p>
+        </header>
         
-        <div class="ui-overlay">
-            <div class="game-header">
-                <div class="stats">
-                    <div class="stat-box">
-                        <div class="stat-label">Lap Time</div>
-                        <div class="stat-value" id="lapTime">1:45.20</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Best Lap</div>
-                        <div class="stat-value" id="bestLap">1:42.83</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Position</div>
-                        <div class="stat-value" id="position">3/8</div>
-                    </div>
+        <div class="main-content">
+            <div class="card negative">
+                <h2><i class="fas fa-ban"></i> Words to Avoid</h2>
+                <p>Certain words can be hurtful and disrespectful. Here are types of language we should avoid using toward Huzaifa or anyone:</p>
+                
+                <div class="word-list">
+                    <div class="word">Insults</div>
+                    <div class="word">Derogatory terms</div>
+                    <div class="word">Name-calling</div>
+                    <div class="word">Discriminatory language</div>
+                    <div class="word">Hate speech</div>
+                    <div class="word">Bullying words</div>
+                </div>
+                
+                <p>Using such language can cause emotional harm, damage relationships, and create hostile environments. Everyone deserves to be treated with dignity and respect.</p>
+                
+                <div class="quote">
+                    "Words have energy and power with the ability to help, to heal, to hinder, to hurt, to harm, to humiliate, and to humble." - Yehuda Berg
                 </div>
             </div>
             
-            <div class="game-title">Turbo Racer</div>
-            
-            <div class="lap-counter">
-                Lap: <span class="lap-number" id="currentLap">2</span>/3
-            </div>
-            
-            <div class="position-indicator">
-                Position: <span class="position-number">3rd</span>
-            </div>
-            
-            <div class="speedometer">
-                <div class="speed-value" id="speed">246</div>
-                <div class="speed-label">km/h</div>
-            </div>
-            
-            <div class="nitro-indicator">
-                <div class="nitro-label">NITRO</div>
-                <div class="nitro-fill"></div>
-            </div>
-            
-            <div class="controls">
-                <div class="control-item">
-                    <div class="key">W</div>
-                    <div class="label">Accelerate</div>
+            <div class="card positive">
+                <h2><i class="fas fa-heart"></i> Positive Alternatives</h2>
+                <p>Instead of harmful language, here are positive ways to communicate with Huzaifa:</p>
+                
+                <div class="word-list">
+                    <div class="word">Respectful</div>
+                    <div class="word">Kind</div>
+                    <div class="word">Encouraging</div>
+                    <div class="word">Supportive</div>
+                    <div class="word">Understanding</div>
+                    <div class="word">Constructive</div>
                 </div>
-                <div class="control-item">
-                    <div class="key">A</div>
-                    <div class="label">Left</div>
-                </div>
-                <div class="control-item">
-                    <div class="key">D</div>
-                    <div class="label">Right</div>
-                </div>
-                <div class="control-item">
-                    <div class="key">SPACE</div>
-                    <div class="label">Nitro</div>
+                
+                <p>Positive communication builds trust, strengthens relationships, and creates an environment where everyone can thrive.</p>
+                
+                <div class="quote">
+                    "Kind words can be short and easy to speak, but their echoes are truly endless." - Mother Teresa
                 </div>
             </div>
         </div>
         
-        <div class="start-screen" id="startScreen">
-            <h1>Turbo Racer</h1>
-            <p>Race through challenging tracks at high speed. Avoid obstacles, use nitro boosts strategically, and climb to first place!</p>
-            <button class="btn" id="startBtn">Start Race</button>
-            <div class="controls" style="position: relative; bottom: auto; margin-top: 40px;">
-                <div class="control-item">
-                    <div class="key">W</div>
-                    <div class="label">Accelerate</div>
-                </div>
-                <div class="control-item">
-                    <div class="key">A/D</div>
-                    <div class="label">Steer</div>
-                </div>
-                <div class="control-item">
-                    <div class="key">SPACE</div>
-                    <div class="label">Nitro Boost</div>
-                </div>
-            </div>
+        <div class="call-to-action">
+            <h2>Take the Kindness Pledge</h2>
+            <p>Commit to using respectful language in all your communications. Your words have power - use them to uplift rather than tear down.</p>
+            <a href="#" class="btn"><i class="fas fa-hands-helping"></i> I Pledge to Be Respectful</a>
         </div>
+        
+        <footer>
+            <p>© 2023 Respectful Communication Initiative | Words matter - choose them wisely</p>
+            <p>If you're experiencing online harassment, reach out to support services in your area</p>
+        </footer>
     </div>
-
-    <script>
-        // Initialize Three.js scene
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x87CEEB);
-        
-        // Create camera
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 5, 10);
-        
-        // Create renderer
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        document.getElementById('gameCanvas').appendChild(renderer.domElement);
-        
-        // Add lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
-        
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(100, 100, 50);
-        scene.add(directionalLight);
-        
-        // Create a simple track
-        function createTrack() {
-            const trackGeometry = new THREE.BoxGeometry(20, 0.1, 100);
-            const trackMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x444444,
-                roughness: 0.9,
-                metalness: 0.1
-            });
-            const track = new THREE.Mesh(trackGeometry, trackMaterial);
-            track.position.y = -0.5;
-            scene.add(track);
-            
-            // Add track markings
-            for (let i = -50; i < 50; i += 4) {
-                const markingGeometry = new THREE.BoxGeometry(0.5, 0.11, 2);
-                const markingMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
-                const marking = new THREE.Mesh(markingGeometry, markingMaterial);
-                marking.position.z = i;
-                scene.add(marking);
-            }
-            
-            // Add borders
-            const borderGeometry = new THREE.BoxGeometry(22, 0.5, 100);
-            const borderMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
-            const leftBorder = new THREE.Mesh(borderGeometry, borderMaterial);
-            leftBorder.position.set(-11, 0, 0);
-            scene.add(leftBorder);
-            
-            const rightBorder = new THREE.Mesh(borderGeometry, borderMaterial);
-            rightBorder.position.set(11, 0, 0);
-            scene.add(rightBorder);
-        }
-        
-        // Create player car
-        function createPlayerCar() {
-            const carGroup = new THREE.Group();
-            
-            // Car body
-            const bodyGeometry = new THREE.BoxGeometry(2, 0.8, 4);
-            const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0xff3300 });
-            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-            body.position.y = 0.4;
-            carGroup.add(body);
-            
-            // Car top
-            const topGeometry = new THREE.BoxGeometry(1.5, 0.7, 2);
-            const topMaterial = new THREE.MeshStandardMaterial({ color: 0xff3300 });
-            const top = new THREE.Mesh(topGeometry, topMaterial);
-            top.position.set(0, 0.9, -0.3);
-            carGroup.add(top);
-            
-            // Wheels
-            const wheelGeometry = new THREE.CylinderGeometry(0.4, 0.4, 0.3, 16);
-            wheelGeometry.rotateZ(Math.PI / 2);
-            const wheelMaterial = new THREE.MeshStandardMaterial({ color: 0x222222 });
-            
-            const wheelPositions = [
-                [-0.8, 0.4, 1.5],
-                [0.8, 0.4, 1.5],
-                [-0.8, 0.4, -1.5],
-                [0.8, 0.4, -1.5]
-            ];
-            
-            wheelPositions.forEach(pos => {
-                const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
-                wheel.position.set(pos[0], pos[1], pos[2]);
-                carGroup.add(wheel);
-            });
-            
-            carGroup.position.y = 0.5;
-            scene.add(carGroup);
-            return carGroup;
-        }
-        
-        // Create opponent cars
-        function createOpponentCars(count) {
-            const cars = [];
-            const colors = [0x0099ff, 0x00cc00, 0xffff00, 0xcc00ff];
-            
-            for (let i = 0; i < count; i++) {
-                const carGroup = new THREE.Group();
-                
-                // Car body
-                const bodyGeometry = new THREE.BoxGeometry(2, 0.8, 4);
-                const bodyMaterial = new THREE.MeshStandardMaterial({ color: colors[i % colors.length] });
-                const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-                body.position.y = 0.4;
-                carGroup.add(body);
-                
-                // Wheels
-                const wheelGeometry = new THREE.CylinderGeometry(0.4, 0.4, 0.3, 16);
-                wheelGeometry.rotateZ(Math.PI / 2);
-                const wheelMaterial = new THREE.MeshStandardMaterial({ color: 0x222222 });
-                
-                const wheelPositions = [
-                    [-0.8, 0.4, 1.5],
-                    [0.8, 0.4, 1.5],
-                    [-0.8, 0.4, -1.5],
-                    [0.8, 0.4, -1.5]
-                ];
-                
-                wheelPositions.forEach(pos => {
-                    const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
-                    wheel.position.set(pos[0], pos[1], pos[2]);
-                    carGroup.add(wheel);
-                });
-                
-                carGroup.position.y = 0.5;
-                carGroup.position.z = -20 - i * 10;
-                carGroup.position.x = (Math.random() - 0.5) * 10;
-                scene.add(carGroup);
-                cars.push(carGroup);
-            }
-            
-            return cars;
-        }
-        
-        // Create environment
-        function createEnvironment() {
-            // Add some mountains in the distance
-            const mountainGroup = new THREE.Group();
-            for (let i = 0; i < 20; i++) {
-                const size = 30 + Math.random() * 30;
-                const mountainGeometry = new THREE.ConeGeometry(size, 50 + Math.random() * 50, 4);
-                const mountainMaterial = new THREE.MeshStandardMaterial({ 
-                    color: 0x4d2600,
-                    roughness: 0.9
-                });
-                const mountain = new THREE.Mesh(mountainGeometry, mountainMaterial);
-                mountain.position.x = (Math.random() - 0.5) * 500;
-                mountain.position.z = -100 - Math.random() * 300;
-                mountain.position.y = -25;
-                mountainGroup.add(mountain);
-            }
-            scene.add(mountainGroup);
-            
-            // Add sky
-            const skyGeometry = new THREE.SphereGeometry(500, 32, 32);
-            const skyMaterial = new THREE.MeshBasicMaterial({ 
-                color: 0x87CEEB,
-                side: THREE.BackSide
-            });
-            const sky = new THREE.Mesh(skyGeometry, skyMaterial);
-            scene.add(sky);
-        }
-        
-        // Initialize game objects
-        createTrack();
-        const playerCar = createPlayerCar();
-        const opponentCars = createOpponentCars(5);
-        createEnvironment();
-        
-        // Game state
-        const gameState = {
-            started: false,
-            speed: 0,
-            maxSpeed: 300,
-            acceleration: 0,
-            playerPosition: { x: 0, z: 0 },
-            rotation: 0,
-            lap: 1,
-            position: 3,
-            lapTime: 0,
-            bestLap: 0,
-            nitro: 100,
-            usingNitro: false
-        };
-        
-        // Handle keyboard input
-        const keys = {};
-        window.addEventListener('keydown', (e) => {
-            keys[e.key.toLowerCase()] = true;
-            
-            if (e.key === ' ' && gameState.nitro > 20 && gameState.started) {
-                gameState.usingNitro = true;
-            }
-        });
-        
-        window.addEventListener('keyup', (e) => {
-            keys[e.key.toLowerCase()] = false;
-            
-            if (e.key === ' ') {
-                gameState.usingNitro = false;
-            }
-        });
-        
-        // Start button
-        document.getElementById('startBtn').addEventListener('click', () => {
-            document.getElementById('startScreen').style.display = 'none';
-            gameState.started = true;
-            gameState.lapTime = 0;
-            gameLoop();
-        });
-        
-        // Game loop
-        function gameLoop() {
-            if (!gameState.started) return;
-            
-            // Update game state
-            updateGame();
-            
-            // Render scene
-            renderer.render(scene, camera);
-            
-            // Continue loop
-            requestAnimationFrame(gameLoop);
-        }
-        
-        function updateGame() {
-            // Update camera to follow player
-            camera.position.set(playerCar.position.x, 5, playerCar.position.z + 8);
-            camera.lookAt(playerCar.position.x, 0, playerCar.position.z - 10);
-            
-            // Handle acceleration
-            if (keys['w'] || keys['arrowup']) {
-                gameState.acceleration = 0.1;
-            } else {
-                gameState.acceleration = -0.05;
-            }
-            
-            // Handle steering
-            if (keys['a'] || keys['arrowleft']) {
-                gameState.rotation = -0.03;
-            } else if (keys['d'] || keys['arrowright']) {
-                gameState.rotation = 0.03;
-            } else {
-                gameState.rotation *= 0.9;
-            }
-            
-            // Apply nitro
-            if (gameState.usingNitro && gameState.nitro > 0) {
-                gameState.acceleration *= 2;
-                gameState.nitro -= 0.5;
-                document.querySelector('.nitro-fill').style.height = `${gameState.nitro}%`;
-            } else if (gameState.nitro < 100) {
-                gameState.nitro += 0.05;
-                document.querySelector('.nitro-fill').style.height = `${gameState.nitro}%`;
-            }
-            
-            // Update speed
-            gameState.speed += gameState.acceleration;
-            gameState.speed = Math.max(0, Math.min(gameState.maxSpeed, gameState.speed));
-            
-            // Update position
-            playerCar.rotation.y = gameState.rotation;
-            playerCar.position.x += Math.sin(playerCar.rotation.y) * (gameState.speed / 100);
-            playerCar.position.z -= Math.cos(playerCar.rotation.y) * (gameState.speed / 100);
-            
-            // Keep player on track
-            playerCar.position.x = Math.max(-8, Math.min(8, playerCar.position.x));
-            
-            // Update opponent cars
-            opponentCars.forEach((car, index) => {
-                car.position.z += gameState.speed / 100;
-                
-                // Simple AI movement
-                if (Math.random() < 0.01) {
-                    car.position.x = (Math.random() - 0.5) * 12;
-                }
-                
-                // Reset position if behind
-                if (car.position.z > 50) {
-                    car.position.z = -50 - Math.random() * 50;
-                }
-            });
-            
-            // Update UI
-            document.getElementById('speed').textContent = Math.floor(gameState.speed);
-            document.getElementById('lapTime').textContent = formatTime(gameState.lapTime);
-            document.getElementById('position').textContent = `${gameState.position}/8`;
-            
-            // Update lap time
-            gameState.lapTime += 0.01;
-        }
-        
-        // Format time as minutes:seconds.milliseconds
-        function formatTime(time) {
-            const minutes = Math.floor(time / 60);
-            const seconds = Math.floor(time % 60);
-            const milliseconds = Math.floor((time % 1) * 100);
-            return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(2, '0')}`;
-        }
-        
-        // Initial render
-        renderer.render(scene, camera);
-        
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
 </body>
 </html>
