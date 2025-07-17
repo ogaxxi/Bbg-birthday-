@@ -1,241 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Respectful Communication Guide</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: #333;
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .container {
-            max-width: 1000px;
-            background: rgba(255, 255, 255, 0.92);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            margin: 20px;
-        }
-        
-        header {
-            background: linear-gradient(to right, #4b6cb7, #182848);
-            color: white;
-            padding: 30px 40px;
-            text-align: center;
-        }
-        
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        .subtitle {
-            font-size: 1.4rem;
-            opacity: 0.9;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .main-content {
-            padding: 40px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-        
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-10px);
-        }
-        
-        .negative {
-            border-top: 5px solid #e74c3c;
-        }
-        
-        .positive {
-            border-top: 5px solid #2ecc71;
-        }
-        
-        h2 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-        }
-        
-        h2 i {
-            margin-right: 12px;
-            font-size: 1.5rem;
-        }
-        
-        .word-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin: 20px 0;
-        }
-        
-        .word {
-            padding: 10px 15px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        
-        .negative .word {
-            background: #ffebee;
-            color: #c0392b;
-            border: 2px dashed #e74c3c;
-            text-decoration: line-through;
-        }
-        
-        .positive .word {
-            background: #e8f5e9;
-            color: #27ae60;
-            border: 2px solid #2ecc71;
-        }
-        
-        p {
-            line-height: 1.7;
-            margin: 15px 0;
-            font-size: 1.1rem;
-            color: #34495e;
-        }
-        
-        .quote {
-            background: #f8f9fa;
-            border-left: 5px solid #3498db;
-            padding: 20px;
-            margin: 25px 0;
-            font-style: italic;
-            border-radius: 0 10px 10px 0;
-        }
-        
-        .call-to-action {
-            background: linear-gradient(to right, #3498db, #2c3e50);
-            color: white;
-            padding: 40px;
-            text-align: center;
-        }
-        
-        .btn {
-            display: inline-block;
-            background: #f39c12;
-            color: white;
-            padding: 15px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .btn:hover {
-            background: #e67e22;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-        
-        footer {
-            text-align: center;
-            padding: 25px;
-            background: #2c3e50;
-            color: #ecf0f1;
-            font-size: 1.1rem;
-        }
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta charset="UTF-8">
+  <title>Click the Box Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #e0f7fa;
+    }
+    #gameContainer {
+      position: relative;
+      width: 600px;
+      height: 400px;
+      margin: 30px auto;
+      border: 2px solid #00796b;
+      background: #ffffff;
+      overflow: hidden;
+    }
+    #box {
+      width: 50px;
+      height: 50px;
+      background-color: #ff5722;
+      position: absolute;
+      display: none;
+      cursor: pointer;
+    }
+    #score, #timer, #highScore {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+    #startBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    #startBtn:hover {
+      background-color: #004d40;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Respectful Communication Guide</h1>
-            <p class="subtitle">Promoting positive language and understanding the impact of our words</p>
-        </header>
-        
-        <div class="main-content">
-            <div class="card negative">
-                <h2><i class="fas fa-ban"></i> Words to Avoid</h2>
-                <p>Certain words can be hurtful and disrespectful. Here are types of language we should avoid using toward Huzaifa or anyone:</p>
-                
-                <div class="word-list">
-                    <div class="word">Insults</div>
-                    <div class="word">Derogatory terms</div>
-                    <div class="word">Name-calling</div>
-                    <div class="word">Discriminatory language</div>
-                    <div class="word">Hate speech</div>
-                    <div class="word">Bullying words</div>
-                </div>
-                
-                <p>Using such language can cause emotional harm, damage relationships, and create hostile environments. Everyone deserves to be treated with dignity and respect.</p>
-                
-                <div class="quote">
-                    "Words have energy and power with the ability to help, to heal, to hinder, to hurt, to harm, to humiliate, and to humble." - Yehuda Berg
-                </div>
-            </div>
-            
-            <div class="card positive">
-                <h2><i class="fas fa-heart"></i> Positive Alternatives</h2>
-                <p>Instead of harmful language, here are positive ways to communicate with Huzaifa:</p>
-                
-                <div class="word-list">
-                    <div class="word">Respectful</div>
-                    <div class="word">Kind</div>
-                    <div class="word">Encouraging</div>
-                    <div class="word">Supportive</div>
-                    <div class="word">Understanding</div>
-                    <div class="word">Constructive</div>
-                </div>
-                
-                <p>Positive communication builds trust, strengthens relationships, and creates an environment where everyone can thrive.</p>
-                
-                <div class="quote">
-                    "Kind words can be short and easy to speak, but their echoes are truly endless." - Mother Teresa
-                </div>
-            </div>
-        </div>
-        
-        <div class="call-to-action">
-            <h2>Take the Kindness Pledge</h2>
-            <p>Commit to using respectful language in all your communications. Your words have power - use them to uplift rather than tear down.</p>
-            <a href="#" class="btn"><i class="fas fa-hands-helping"></i> I Pledge to Be Respectful</a>
-        </div>
-        
-        <footer>
-            <p>© 2023 Respectful Communication Initiative | Words matter - choose them wisely</p>
-            <p>If you're experiencing online harassment, reach out to support services in your area</p>
-        </footer>
-    </div>
+
+  <h1>🎯 Click the Box Game</h1>
+  <div id="score">Score: 0</div>
+  <div id="highScore">High Score: 0</div>
+  <div id="timer">Time Left: 30s</div>
+  <button id="startBtn">Start Game</button>
+
+  <div id="gameContainer">
+    <div id="box"></div>
+  </div>
+
+  <!-- Click Sound -->
+  <audio id="clickSound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
+
+  <script>
+    const box = document.getElementById("box");
+    const scoreDisplay = document.getElementById("score");
+    const highScoreDisplay = document.getElementById("highScore");
+    const timerDisplay = document.getElementById("timer");
+    const startBtn = document.getElementById("startBtn");
+    const clickSound = document.getElementById("clickSound");
+    const gameContainer = document.getElementById("gameContainer");
+
+    let score = 0;
+    let highScore = localStorage.getItem("highScore") || 0;
+    let gameInterval;
+    let countdown;
+    let timeLeft = 30;
+    let gameRunning = false;
+
+    highScoreDisplay.textContent = "High Score: " + highScore;
+
+    function randomPosition() {
+      const maxX = gameContainer.clientWidth - 50;
+      const maxY = gameContainer.clientHeight - 50;
+      const x = Math.floor(Math.random() * maxX);
+      const y = Math.floor(Math.random() * maxY);
+      box.style.left = x + "px";
+      box.style.top = y + "px";
+    }
+
+    function updateScore() {
+      scoreDisplay.textContent = "Score: " + score;
+    }
+
+    function updateTimer() {
+      timerDisplay.textContent = "Time Left: " + timeLeft + "s";
+    }
+
+    function endGame() {
+      clearInterval(gameInterval);
+      clearInterval(countdown);
+      box.style.display = "none";
+      gameRunning = false;
+      if (score > highScore) {
+        localStorage.setItem("highScore", score);
+        highScoreDisplay.textContent = "High Score: " + score;
+        alert("🎉 New High Score: " + score + "!");
+      } else {
+        alert("Time's up! Your score: " + score);
+      }
+    }
+
+    function startGame() {
+      if (gameRunning) return;
+      score = 0;
+      timeLeft = 30;
+      updateScore();
+      updateTimer();
+      gameRunning = true;
+      box.style.display = "block";
+      randomPosition();
+
+      gameInterval = setInterval(() => {
+        randomPosition();
+      }, 800);
+
+      countdown = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if (timeLeft <= 0) endGame();
+      }, 1000);
+    }
+
+    box.addEventListener("click", () => {
+      if (!gameRunning) return;
+      score++;
+      clickSound.currentTime = 0;
+      clickSound.play();
+      updateScore();
+      randomPosition();
+    });
+
+    startBtn.addEventListener("click", startGame);
+  </script>
+
 </body>
 </html>
